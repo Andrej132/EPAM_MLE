@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  train:
+    build:
+      context: .
+      dockerfile: dockerfile_train
+
+  flask:
+    build:
+      context: .
+      dockerfile: dockerfile_flask
+    ports: 
+      - "5000:5000"
+    depends_on:
+      - train
+
+  test:
+    build:
+      context: .
+      dockerfile: dockerfile_test
+    depends_on:
+      - flask

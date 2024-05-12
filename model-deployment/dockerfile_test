@@ -1,0 +1,14 @@
+FROM python:3.10
+
+WORKDIR /app
+
+COPY setup.py .
+
+RUN pip install .
+
+COPY . .
+
+CMD ["pytest","-v","test/test_train.py"]
+
+
+
