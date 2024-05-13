@@ -12,5 +12,5 @@ def load_and_split_data():
 
 
 def load_model():
-    model = pickle.load(open('model.pkl', 'rb'))
+    model = pickle.load(open('/app/src/training/model.pkl', 'rb'))
     return model

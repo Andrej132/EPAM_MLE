@@ -5,6 +5,8 @@ services:
     build:
       context: .
       dockerfile: dockerfile_train
+    volumes:
+      - ./src/training:/app/src/training
 
   flask:
     build:
@@ -14,7 +16,9 @@ services:
       - "5000:5000"
     depends_on:
       - train
-
+    volumes:
+      - ./src/training:/app/src/training
+      
   test:
     build:
       context: .
