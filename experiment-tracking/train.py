@@ -10,6 +10,8 @@ from sklearn.utils import shuffle
 import mlflow
 from mlflow.models.signature import infer_signature
 from mlflow.data.pandas_dataset import PandasDataset
+import boto3
+import pickle
 
 
 def create_mlflow_experiment(experiment_name: str, artifact_location: str, tags: dict[str, Any]) -> str:
@@ -64,6 +66,7 @@ def evaluate_model(model, X_test, y_test):
 
 
 def perform_experiment(models, feature_subsets, data, experiment_id):
+    s3_client = boto3.client('s3')
     for model in models:
         with mlflow.start_run(run_name="Run with {} model".format(model), experiment_id=experiment_id):
             for subset in feature_subsets:
@@ -85,6 +88,12 @@ def perform_experiment(models, feature_subsets, data, experiment_id):
                     best_model, best_params = train_model(model, X_train, y_train, param_grid)
                     metrics = evaluate_model(best_model, X_test, y_test)
                     model_signature = infer_signature(X_train, y_train, params=best_params)
+
+                    if (type(best_model) == type(KNeighborsClassifier())):
+                        serialized_model = pickle.dumps(best_model)
+                        s3_client.put_object(Body=serialized_model, Bucket="mlflow-bucket13",
+                                             Key="mlflowexperiment/model")
+
 
                     dataset: PandasDataset = mlflow.data.from_pandas(data)
                     mlflow.log_input(dataset, context="whole dataset")
