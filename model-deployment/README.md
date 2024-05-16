@@ -19,4 +19,3 @@ Three containers are started: first for training, second for api and third for t
 ```
 http://127.0.0.1:5000
 ```
-
