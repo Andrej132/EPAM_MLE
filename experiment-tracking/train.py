@@ -89,11 +89,13 @@ def perform_experiment(models, feature_subsets, data, experiment_id):
                     metrics = evaluate_model(best_model, X_test, y_test)
                     model_signature = infer_signature(X_train, y_train, params=best_params)
 
-                    if (type(best_model) == type(KNeighborsClassifier())):
-                        serialized_model = pickle.dumps(best_model)
-                        s3_client.put_object(Body=serialized_model, Bucket="mlflow-bucket13",
-                                             Key="mlflowexperiment/model")
-
+                    try:
+                        s3_client.head_object(Bucket=bucket_name, Key=key)
+                        print("Model exists in bucket")
+                    except s3_client.exceptions.NoSuchKey:
+                        if isinstance(best_model, KNeighborsClassifier):
+                            serialized_model = pickle.dumps(best_model)
+                            s3_client.put_object(Body=serialized_model, Bucket=bucket_name, Key=key)
 
                     dataset: PandasDataset = mlflow.data.from_pandas(data)
                     mlflow.log_input(dataset, context="whole dataset")
