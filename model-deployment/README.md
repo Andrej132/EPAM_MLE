@@ -19,3 +19,8 @@ Three containers are started: first for training, second for api and third for t
 ```
 http://127.0.0.1:5000
 ```
+You can open another terminal and use a command:
+```
+curl -X POST http://127.0.0.1:5000/batch_predict
+```
+This command will start batch mode and you can see the prediction results in the last column in the terminal.

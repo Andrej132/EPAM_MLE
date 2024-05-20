@@ -1,0 +1,7 @@
+0 17 * * * root curl -X POST http://localhost:5000/batch_predict
+
+
+
+
+
+

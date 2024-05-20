@@ -2,6 +2,12 @@ FROM python:3.10
 
 WORKDIR /app
 
+RUN apt-get update && apt-get -y install cron
+
+COPY cronfile /etc/cron.d/my-cronjob
+RUN chmod 0644 /etc/cron.d/my-cronjob
+RUN crontab /etc/cron.d/my-cronjob
+
 COPY setup.py .
 
 RUN pip install .

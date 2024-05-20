@@ -1,6 +1,7 @@
 from sklearn import datasets
 from sklearn.model_selection import train_test_split
 import pickle
+import pandas as pd
 
 
 def load_and_split_data():
