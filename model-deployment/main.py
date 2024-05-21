@@ -2,9 +2,9 @@ from flask import Flask, request, render_template, send_file
 import numpy as np
 import src.training.utils
 import pandas as pd
-from sklearn.datasets import load_iris
 
 app = Flask(__name__)
+pred_dict = {0: "setosa", 1: "versicolor", 2: "virginica"}
 
 
 @app.route('/')
@@ -24,14 +24,21 @@ def predict():
 
 @app.route('/batch_predict', methods=['POST'])
 def batch_predict():
-    iris = load_iris()
-    iris_data = iris.data
+    if 'file' not in request.files:
+        return "There is no key 'file' in the request", 400
+
+    file = request.files['file']
+
+    if file.filename == '':
+        return "File is not selected", 400
+
+    file_path = "batch.csv"
+    file.save(file_path)
+    iris = pd.read_csv(file_path)
     model = src.training.utils.load_model()
-    predictions = model.predict(iris_data)
-    predictions_df = pd.DataFrame(iris_data, columns=iris.feature_names)
-    predictions_df['predictions'] = predictions
-    file_path = '/app/src/training/iris_with_predictions.csv'
-    predictions_df.to_csv(file_path, index=False)
+    predictions = model.predict(iris)
+    iris['predictions'] = [pred_dict[prediction] for prediction in predictions]
+    iris.to_csv(file_path, index=False)
     return send_file(file_path, as_attachment=True)
 
 

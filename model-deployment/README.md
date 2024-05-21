@@ -21,6 +21,6 @@ http://127.0.0.1:5000
 ```
 You can open another terminal and use a command:
 ```
-curl -X POST http://127.0.0.1:5000/batch_predict
+curl -X POST -F "file=@batch.csv" http://127.0.0.1:5000/batch_predict -o batch_with_predictions.csv
 ```
-This command will start batch mode and you can see the prediction results in the last column in the terminal.
+This command will start batch mode and you can see the prediction results in the new batch_with_predictions.csv file.
