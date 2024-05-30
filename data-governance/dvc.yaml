@@ -1,0 +1,33 @@
+stages:
+  basic_cleaning:
+    cmd: python3 basic_cleaning.py data/Iris.csv data/preprocessed_basic_cleaning.csv
+    deps:
+    - data/Iris.csv
+    - basic_cleaning.py
+    outs:
+    - data/preprocessed_basic_cleaning.csv
+
+  scaling:
+    cmd: python3 scaling.py data/preprocessed_basic_cleaning.csv data/preprocessed_scaling.csv
+    deps:
+    - data/preprocessed_basic_cleaning.csv
+    - scaling.py
+    outs:
+    - data/preprocessed_scaling.csv
+
+  outlier_detection:
+    cmd: python3 outlier_detection.py data/preprocessed_scaling.csv data/preprocessed_outlier_detection.csv
+    deps:
+    - data/preprocessed_scaling.csv
+    - outlier_detection.py
+    outs:
+    - data/preprocessed_outlier_detection.csv
+
+  train_model:
+    cmd: python3 train.py
+    deps:
+      - data/preprocessed_outlier_detection.csv
+      - train.py
+    outs: []
+    metrics:
+      - metrics.json

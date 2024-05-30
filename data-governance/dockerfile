@@ -1,0 +1,19 @@
+FROM python:3.10
+
+ENV AWS_ACCESS_KEY_ID=AKIAYS2NTB3PUPB4SA4A
+ENV AWS_SECRET_ACCESS_KEY=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
+ENV AWS_DEFAULT_REGION=eu-north-1
+
+RUN apt-get update && apt-get install -y \
+    gcc \
+    libpq-dev \
+    awscli \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+COPY . .
+
+RUN pip install -r requirements.txt
+
+CMD ["sh", "-c", "dvc pull data/Iris.csv && dvc repro && dvc metrics show"]
