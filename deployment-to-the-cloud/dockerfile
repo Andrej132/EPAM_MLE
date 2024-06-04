@@ -1,0 +1,28 @@
+FROM python:3.8-slim
+
+WORKDIR /opt/program
+
+COPY src /opt/program
+
+COPY model.pkl /opt/ml/model/model.pkl
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    nginx \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN pip install --no-cache-dir flask joblib gunicorn scikit-learn boto3
+
+RUN rm /etc/nginx/nginx.conf
+
+COPY src/nginx.conf /opt/program/nginx.conf
+
+RUN chmod +x /opt/program/serve
+
+EXPOSE 8080
+
+ENV MODEL_SERVER_TIMEOUT=60
+ENV MODEL_SERVER_WORKERS=1
+
+ENTRYPOINT ["/opt/program/serve"]
+
