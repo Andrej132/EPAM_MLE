@@ -44,4 +44,19 @@ Use an HTTP client (e.g., Postman or curl) to send requests to the API Gateway e
 
 ![test](https://github.com/Andrej132/EPAM_MLE/assets/93214115/9d118a09-2574-40e8-a13d-764eb5c1d177)
 
+Endpoint can be invoked by using terminal. Open the terminal in project folder and create a docker image and run the the container. 
+Docker image:
+```
+docker build -t image .
+```
+Run the container on port 8080:
+```
+docker run -p 8080:8080 image
+```
+If the application is running, open new terminal and enter the command:
+```
+curl -X POST http://localhost:8080/invocations -H "Content-Type: application/json" -d '{"input": {"sepal_length": 5.1,"sepal_width": 3.5,"petal_length": 1.4,"petal_width": 0.2}}'
+``` 
+
+
 
