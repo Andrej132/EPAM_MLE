@@ -2,4 +2,5 @@ scikit-learn
 pandas
 numpy
 dvc[s3]
+pylint
 

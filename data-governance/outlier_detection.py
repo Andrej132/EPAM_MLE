@@ -1,15 +1,25 @@
+"""
+This module performs outlier detection on a CSV file using z-scores.
+"""
+
+import argparse
 import pandas as pd
 import numpy as np
-import argparse
 
 
 def outlier_detection(input_file, output_file):
+    """
+    Detect and remove outliers in the input CSV file.
+
+    Args:
+        input_file (str): Path to the input CSV file.
+        output_file (str): Path to the output CSV file.
+    """
     df = pd.read_csv(input_file)
 
-    X = df.drop('Species', axis=1)
-    y = df['Species']
+    features = df.drop('Species', axis=1)
 
-    z_scores = (X - X.mean()) / X.std()
+    z_scores = (features - features.mean()) / features.std()
     outliers = (np.abs(z_scores) > 3).any(axis=1)
 
     preprocessed_df = df[~outliers]
