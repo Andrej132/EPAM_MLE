@@ -6,6 +6,8 @@ COPY src /opt/program
 
 COPY model.pkl /opt/ml/model/model.pkl
 
+RUN ls -l /opt/ml/model/
+
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     nginx \
